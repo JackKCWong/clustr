@@ -55,7 +55,7 @@ fn main() {
     };
 
     let idx = cli.index.unwrap_or(0) as usize;
-    let target: Vec<_> = records.iter().map(|r| r[idx].to_string()).collect();
+    let target: Vec<&str> = records.iter().filter_map(|r| r.get(idx)).collect();
     let len = target.len();
 
     let thres = cli.threshold;
@@ -72,8 +72,8 @@ fn main() {
 
             let mut v = Vec::new();
             for j in (i + 1)..len {
-                let left = x.as_str();
-                let right = target[j].as_str();
+                let left = x;
+                let right = target[j];
                 let m = match cli.metric.as_str() {
                     "hamming" => hamming(left, right).unwrap_or(0) as f64,
                     "levenshtein" => levenshtein(left, right) as f64,
